@@ -1,7 +1,7 @@
 #ifndef SYMTAB_H
 #define SYMTAB_H
 
-#define MAX 100
+#define MAX 101
 
 enum typ {Predicate, Function, Variable};
 enum var_type {Int, NoType};

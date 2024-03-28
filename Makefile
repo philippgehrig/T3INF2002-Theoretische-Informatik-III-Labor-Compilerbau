@@ -1,30 +1,26 @@
-#**********************************************
-#*                                            *
-#*     Project: pl1c	                      *
-#*     Module:  Makefile                      *
-#*                                            *
-#*     (c) 2021 by Klaus Wieland              *
-#*                                            *
-#**********************************************
+# MAKEFILE FOR FLEX TESTING
 
-objects = scanner.o
-CC	= gcc
-CFLAGS	= -O
-LEX	= flex
-YACC	= bison
+# CREATED BY: DINAR KARCHEVSKII 
+LEX=flex
+CC=gcc
+YACC=bison
 
+all: semantic_check
 
-all: pl1c
+scanner.c: scanner.l parser.tab.h parser.tab.c
+	$(LEX) -t scanner.l > scanner.c
 
-pl1c: $(objects)
-	$(CC) -o $@ $^
+parser.tab.c parser.tab.h: parser.y
+	$(YACC) -d parser.y
 
-parser.c:	parser.y
-	$(YACC) -d $< -o $@
+scanner.o: scanner.c parser.tab.h
+	$(CC) -c -o scanner.o scanner.c
 
-scanner.c:	scanner.l 
-	$(LEX) -t $< > $@
+parser.tab.o: parser.tab.c
+	$(CC) -c -o parser.tab.o parser.tab.c
 
+semantic_check: scanner.o parser.tab.o
+	$(CC) scanner.o parser.tab.o -o semantic_check
 
 clean:
-	rm pl1c parser.c scanner.c parser.h $(objects)
+	rm -f scanner.o parser.tab.o parser.tab.c parser.tab.h scanner.c semantic_check

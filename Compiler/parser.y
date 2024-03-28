@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "symTab.h"
+
+
 int yylex(void);
 void initialize();
 int yyerror(char *s);
@@ -43,14 +46,19 @@ file:
 
 declarations:     DECLARE PREDICATE ID DD DIGIT { 
                     printf("PARSER: Declare Predicate %s with %d\n", $<val>3, $<number>5);
+					insert_right($<val>3,Predicate,$<number>5,NoType); 
+					// printTable();
                   }
                 | DECLARE FUNCTION ID DD DIGIT { 
                     printf("PARSER: Declare Function %s with %d\n", $<val>3, $<number>5);
-
+                    insert_right($<val>3,Function,$<number>5,NoType); 
+					 // printTable();
                   }
 
                 | DECLARE VARIABLE ID DD INT { 
                     printf("PARSER: Declare Variable %s with int \n", $<val>3);
+                    insert_right($<val>3,Variable,$<number>5,NoType); 
+					// printTable();
                   }
                 ;
 
