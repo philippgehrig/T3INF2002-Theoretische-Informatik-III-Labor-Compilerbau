@@ -1,0 +1,6 @@
+Remove all previous files:
+1: make clean 
+Build the project:
+2: make
+Create output
+3: ./<outputfile> <inputfile> => ./pl1c complex_in.pl1
