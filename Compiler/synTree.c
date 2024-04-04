@@ -356,7 +356,6 @@ void writeOutputFormula(struct node* node, FILE *f){
 		}
 	}
 }
-// enum nodeT{all, exist, and, or, implication, equivalence, negation, predicate, function, variable,true_node, false_node, number, argument_t};
 /**
  * @brief Function to print the Syntax Tree
  * 
