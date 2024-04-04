@@ -39,6 +39,7 @@ tableEntry insert_right(char identifier[], typ typ, int arity, var_type type)
     else{
         printf("ID already exists!");
     }
+    return NULL;
 }
 
 int checkPredicate(char identifier[])
@@ -124,5 +125,5 @@ void printTable()
 		temp = temp->next;
 	}
 	temp = NULL;
-	printf("\n-----------------------------\n", index);
+	printf("\n-----------------------------\n");
 }

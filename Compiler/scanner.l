@@ -115,9 +115,7 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 
 %%
 
-int main( argc, argv )
-int argc;
-char **argv;
+int main(int argc, char** argv)
 {
   ++argv, --argc;  /* skip over program name */
   if ( argc > 0 )
