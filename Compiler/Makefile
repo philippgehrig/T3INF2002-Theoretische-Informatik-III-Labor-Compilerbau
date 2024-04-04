@@ -7,7 +7,7 @@
 #*                                            *
 #**********************************************
 
-objects = parser.o scanner.o symTab.o 
+objects = parser.o symTab.o synTree.o scanner.o
 CC	= gcc
 CFLAGS	= -O
 LEX	= flex
@@ -26,10 +26,10 @@ scanner.c:	scanner.l
 	$(LEX) -t $< > $@
 
 
- 
-scanner.o:	  parser.h
-symboltable.o:	  symTab.h
-parser.o:	  parser.h symTab.h  
+scanner.o:	parser.h
+symTab.o:	symTab.h
+synTree.o:	synTree.h symTab.h
+parser.o:	parser.h symTab.h synTree.h 
 parser.h:	parser.y
 
 clean:

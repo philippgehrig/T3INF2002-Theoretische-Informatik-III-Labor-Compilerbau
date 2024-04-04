@@ -38,10 +38,43 @@ struct node
             struct node* argument;
             struct node* next;
         }argument_struct;
-    };
+    }synTree;
 };
     
+struct node* makeAllNode(struct node* var, struct node* formula_node);
 
+struct node* makeExistNode(struct node* var, struct node* formula_node);
 
+struct node* makeConjunctionNode(struct node* formula_left_node, struct node* formula_right_node);
 
-#endif // SYNTREE_H
+struct node* makeDisjunctionNode(struct node* formula_left_node, struct node* formula_right_node);
+
+struct node* makeImplicationNode(struct node* formula_left_node, struct node* formula_right_node);
+
+struct node* makeEquivalenceNode(struct node* formula_left_node, struct node* formula_right_node);
+
+struct node* makeNegationNode(struct node* formula);
+
+struct node* makeFunctionNode(tableEntry SymTabEntry, struct node* argumentList);
+
+struct node* makePredicateNode(tableEntry SymTabEntry, struct node* argumentList);
+
+struct node* makeVariableNode(tableEntry SymTabEntry);
+
+struct node* makeTrueNode();
+
+struct node* makeFalseNode();
+
+struct node* makeArgumentNode(struct node* arg);
+
+struct node* appendArgumentNode( struct node* argument_left ,struct node* argument_new);
+
+struct node* makeNumberNode(int number);
+
+struct node* copyOfTeilTree(struct node* node);
+
+void  freeTeilTree(struct node* node);
+
+void printTree(struct node* node, int level);
+
+#endif
