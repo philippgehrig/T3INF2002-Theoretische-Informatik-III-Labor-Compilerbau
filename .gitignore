@@ -3,3 +3,5 @@ pl1c
 parser.c
 parser.h
 scanner.c
+.DS_Store
+.vscode
