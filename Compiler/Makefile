@@ -7,7 +7,7 @@
 #*                                            *
 #**********************************************
 
-objects = parser.o symTab.o synTree.o scanner.o
+objects = parser.o symTab.o synTree.o scanner.o generate.o
 CC	= gcc
 CFLAGS	= -O
 LEX	= flex
@@ -31,6 +31,7 @@ symTab.o:	symTab.h
 synTree.o:	synTree.h symTab.h
 parser.o:	parser.h symTab.h synTree.h 
 parser.h:	parser.y
+generate.o: generate.h symTab.h synTree.h
 
 clean:
 	rm pl1c parser.c scanner.c parser.h $(objects)
