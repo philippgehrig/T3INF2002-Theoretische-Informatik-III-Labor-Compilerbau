@@ -1,105 +1,161 @@
 #include "generate.h"
 
-void generate(struct node* node)
+void generate(struct node *node)
 {
-    if(node == NULL)
+    generate_helper(node, NULL, false);
+}
+
+/**
+ * Generates code for a given node in the abstract syntax tree (AST).
+ *
+ * @param node The current node in the AST.
+ * @param parent The parent node of the current node.
+ * @param right A boolean value indicating whether the current node is the right child of its parent.
+ */
+void generate_helper(struct node *node, struct node *parent, bool right)
+{
+    if (node == NULL)
         return;
-    switch(node->type)
+
+    // The initial entry point for each node's generation should not directly use addBracket
+    if (parent == NULL)
     {
+        switch (node->type)
+        {
         case type_all:
             printf("ALL[");
-            generate(node->synTree.quantor_struct.var);
+            generate_helper(node->synTree.quantor_struct.var, node, false);
             printf("] ");
-            generate(node->synTree.quantor_struct.formula);
+            generate_helper(node->synTree.quantor_struct.formula, node, false);
             break;
         case type_exist:
-            printf("EXSIST[");
-            generate(node->synTree.quantor_struct.var);
+            printf("EXIST[");
+            generate_helper(node->synTree.quantor_struct.var, node, false);
             printf("] ");
-            generate(node->synTree.quantor_struct.formula);
+            generate_helper(node->synTree.quantor_struct.formula, node, false);
             break;
         case type_and:
-            generate(node->synTree.binary_struct.formula_left);
-            printf("& ");
-            generate(node->synTree.binary_struct.formula_right);
+            generate_helper(node->synTree.binary_struct.formula_left, node, false);
+            printf(" & ");
+            generate_helper(node->synTree.binary_struct.formula_right, node, true);
             break;
         case type_or:
-            generate(node->synTree.binary_struct.formula_left);
-            printf("| ");
-            generate(node->synTree.binary_struct.formula_right);
+            generate_helper(node->synTree.binary_struct.formula_left, node, false);
+            printf(" | ");
+            generate_helper(node->synTree.binary_struct.formula_right, node, true);
             break;
         case type_implication:
-            generate(node->synTree.binary_struct.formula_left);
-            printf("-> ");
-            generate(node->synTree.binary_struct.formula_right);
+            generate_helper(node->synTree.binary_struct.formula_left, node, false);
+            printf(" -> ");
+            generate_helper(node->synTree.binary_struct.formula_right, node, true);
             break;
         case type_equivalence:
-            generate(node->synTree.binary_struct.formula_left);
-            printf("<-> ");
-            generate(node->synTree.binary_struct.formula_right);
+            generate_helper(node->synTree.binary_struct.formula_left, node, false);
+            printf(" <-> ");
+            generate_helper(node->synTree.binary_struct.formula_right, node, true);
             break;
         case type_negation:
             printf("~ ");
-            generate(node->synTree.unary_junctor.formula);
+            generate_helper(node->synTree.unary_junctor.formula, node, false);
             break;
         case type_predicate:
             printf("PREDICATE ");
             printf(node->synTree.predicate_struct.tableEntry->identifier);
             printf("(");
-            generate(node->synTree.predicate_struct.argument);
+            generate_helper(node->synTree.predicate_struct.argument, node, false);
             printf(")");
             break;
         case type_function:
             printf("FUNCTION ");
             printf(node->synTree.function_struct.tableEntry->identifier);
-            if(node->synTree.function_struct.tableEntry->arity == 0)
-                generate(node->synTree.function_struct.argument);
-            else
             printf("(");
-            generate(node->synTree.function_struct.argument);
+            generate_helper(node->synTree.function_struct.argument, node, false);
             printf(") ");
+            break;
+        case type_variable:
+            printf(node->synTree.variable_struct.tableEntry->identifier);
+            break;
+        case type_number_t:
+            printf("%d", node->synTree.boolean_struct.value);
+            break;
+        case type_true_node:
+            printf("TRUE");
+            break;
+        case type_false_node:
+            printf("FALSE");
+            break;
+        case type_argument_t:
+            generate_helper(node->synTree.argument_struct.argument, node, false);
+            if (node->synTree.argument_struct.next != NULL)
+            {
+                printf(", ");
+                generate_helper(node->synTree.argument_struct.next, node, false);
+            }
             break;
         default:
             printf("default");
-        
+            break;
+        }
     }
-    return;
+    else
+    {
+        // If not root node, decide on brackets based on parent context
+        addBracket(node, right, parent);
+        return;
+    }
 }
 
-/*
-@param node: the node to be printed
-@param right: the position of the node in the formula => needed for Assoziativität
-@param parent: the parent of the node
-*/
-
-
-void addBracket(struct node* node, bool right, struct node* parent)
+/**
+ * Adds a bracket to the syntax tree.
+ *
+ * This function adds a bracket node to the syntax tree. The bracket can be added either on the left or right side of the given node.
+ *
+ * @param node The node to which the bracket will be added.
+ * @param right A boolean value indicating whether the bracket should be added on the right side (true) or left side (false) of the node.
+ * @param parent The parent node of the given node.
+ */
+void addBracket(struct node *node, bool right, struct node *parent)
 {
-    if(node == NULL)
+    if (node == NULL)
         return;
-    switch (node->type)
+
+    bool needsBrackets = false;
+
+    if (parent != NULL)
     {
+        switch (parent->type)
+        {
         case type_negation:
-            if(parent->type == type_function || parent->type == type_predicate || parent->type == type_all || parent->type == type_exist) {
-                printf("(");
-                generate(node);
-                printf(")");
-            }
-            else generate(node);
+            // Avoid brackets for simple negations directly applied
+            needsBrackets = !(node->type == type_predicate || node->type == type_function || node->type == type_variable || node->type == type_number_t || node->type == type_true_node || node->type == type_false_node);
+            break;
         case type_and:
         case type_or:
+            // Logical operators might need brackets depending on their interaction with other operators
+            if (node->type == type_implication || node->type == type_equivalence || (node->type == type_or && parent->type == type_and))
+            {
+                needsBrackets = true;
+            }
+            break;
         case type_implication:
-            if(node->type == type_implication || right){
-                printf("(");
-                generate(node);
-                printf(")");
-            }
-            else{
-                generate(node);
-            }
         case type_equivalence:
-        
+            // Implication and equivalence are the least tightly binding and right-associative
+            // Reduce bracket use: only add if switching between different types or for clarity in complex expressions
+            needsBrackets = right && (node->type != parent->type);
+            break;
         default:
             break;
+        }
+    }
+
+    if (needsBrackets)
+    {
+        printf("(");
+        generate(node);
+        printf(")");
+    }
+    else
+    {
+        generate(node);
     }
 }
