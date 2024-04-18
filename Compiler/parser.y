@@ -5,6 +5,7 @@
 #include "symTab.h"
 #include "synTree.h"
 #include "generate.h"
+#include "optimize.h"
 
 int yylex(void);
 void initialize();
@@ -37,6 +38,7 @@ file:
         }
         | formula SEMICOLON file {
             printTree($<node>1,0);
+            $<node>1 = removeDoubleNeg($<node>1);
             generate($<node>1);
             FILE *f = fopen("output.pl1", "w");
             if(f == NULL){
