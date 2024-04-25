@@ -107,7 +107,7 @@ tableEntry search_for(char *identifier)
     return NULL;
 }
 
-void printTable()
+void printSymTabService()
 {
 	fprintf(stderr, "\n------Symboltable-------:\n");
 	char const *typen[] = {"Predicate", "Function", "Variable"};
@@ -126,4 +126,30 @@ void printTable()
 	}
 	temp = NULL;
 	fprintf(stderr, "\n-----------------------------\n");
+}
+
+void printSymTab(){
+    {
+	
+	char const *typen[] = {"PREDICATE", "FUNCTION", "VARIABLE"};
+	char const *var_types[] = {"int", "NoType"};
+
+	tableEntry temp = SymTable;
+    
+	while (temp != NULL)
+	{
+		printf("DECLARE ");
+		printf("%s ", typen[temp->typ]);
+		printf("%s ", temp->identifier);
+		printf(": ");
+		if(temp->var_type != NoType){
+			printf("%s\n",var_types[temp->var_type]);
+		}
+		else{
+			printf("%d \n", temp->arity);
+		}
+		temp = temp->next;
+	}
+	temp = NULL;
+}
 }

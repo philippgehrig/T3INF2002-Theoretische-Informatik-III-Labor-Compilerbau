@@ -23,5 +23,6 @@ int checkPredicate(char identifier[]);
 int checkVariable(char identifier[]);
 int checkFunction(char identifier[]);
 tableEntry search_for(char *identifier);
-void printTable();
+void printSymTabService();
+void printSymTab();
 #endif // SYMTAB_H

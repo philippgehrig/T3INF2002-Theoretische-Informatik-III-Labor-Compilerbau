@@ -275,83 +275,82 @@ struct node *copyOfTeilTree(struct node* node){
  * @brief Function to print the Syntax of the SyntaxTree as Output file
  * 
  * @param node 
- * @param f 
  */
-void writeOutputFormula(struct node* node, FILE *f){
+void writeOutputFormula(struct node* node){
 
 	if (node != NULL)
 	{
 		switch (node->type)
 		{
 		case type_all:
-			fprintf(stderr,f, "All[");
-			writeOutputFormula(node->synTree.quantor_struct.var, f);
-			fprintf(stderr,f, "]");
-			writeOutputFormula(node->synTree.quantor_struct.formula, f);
+			fprintf(stderr, "All[");
+			writeOutputFormula(node->synTree.quantor_struct.var);
+			fprintf(stderr, "]");
+			writeOutputFormula(node->synTree.quantor_struct.formula);
 			break;
 		case type_exist:
-			fprintf(stderr,f, "EXIST[");
-			writeOutputFormula(node->synTree.quantor_struct.var, f);
-			fprintf(stderr,f, "]");
-			writeOutputFormula(node->synTree.quantor_struct.formula, f);
+			fprintf(stderr, "EXIST[");
+			writeOutputFormula(node->synTree.quantor_struct.var);
+			fprintf(stderr, "]");
+			writeOutputFormula(node->synTree.quantor_struct.formula);
 			break;
 		case type_and:
-			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(stderr,f, " & ");
-			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
+			writeOutputFormula(node->synTree.binary_struct.formula_left);
+			fprintf(stderr, " & ");
+			writeOutputFormula(node->synTree.binary_struct.formula_right);
 			break;
 		case type_or:
-			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(stderr,f, " | ");
-			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
+			writeOutputFormula(node->synTree.binary_struct.formula_left);
+			fprintf(stderr, " | ");
+			writeOutputFormula(node->synTree.binary_struct.formula_right);
 			break;
 		case type_implication:
-			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(stderr,f, " -> ");
-			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
+			writeOutputFormula(node->synTree.binary_struct.formula_left);
+			fprintf(stderr, " -> ");
+			writeOutputFormula(node->synTree.binary_struct.formula_right);
 			break;
 		case type_equivalence:
-			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(stderr,f, " <-> ");
-			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
+			writeOutputFormula(node->synTree.binary_struct.formula_left);
+			fprintf(stderr, " <-> ");
+			writeOutputFormula(node->synTree.binary_struct.formula_right);
 			break;
 		case type_negation:
-			fprintf(stderr,f, "~(");
-			writeOutputFormula(node->synTree.unary_junctor.formula, f);
-			fprintf(stderr,f, ")");
+			fprintf(stderr, "~(");
+			writeOutputFormula(node->synTree.unary_junctor.formula);
+			fprintf(stderr, ")");
 			break;
 		case type_predicate:
-			fprintf(stderr,f,"%s(", node->synTree.predicate_struct.tableEntry->identifier);
-			writeOutputFormula(node->synTree.predicate_struct.argument, f);
-			fprintf(stderr,f, ")");
+			fprintf(stderr,"%s(", node->synTree.predicate_struct.tableEntry->identifier);
+			writeOutputFormula(node->synTree.predicate_struct.argument);
+			fprintf(stderr, ")");
 			break;
 		case type_function:
-			fprintf(stderr,f, "%s(", node->synTree.function_struct.tableEntry->identifier);
-			writeOutputFormula(node->synTree.function_struct.argument, f);
-			fprintf(stderr,f, ")");
+			fprintf(stderr, "%s(", node->synTree.function_struct.tableEntry->identifier);
+			writeOutputFormula(node->synTree.function_struct.argument);
+			fprintf(stderr, ")");
 			break;
 		case type_variable:
-			fprintf(stderr,f, "%s", node->synTree.variable_struct.tableEntry->identifier);
+			fprintf(stderr, "%s", node->synTree.variable_struct.tableEntry->identifier);
 			break;
 		case type_true_node:
-			fprintf(stderr,f, "TRUE");
+			fprintf(stderr, "TRUE");
 			break;
 		case type_false_node:
-			fprintf(stderr,f, "FALSE");
+			fprintf(stderr, "FALSE");
 			break;
 		case type_number_t:
-			fprintf(stderr,f, "%d", node->synTree.number);
+			fprintf(stderr, "%d", node->synTree.number);
 			break;
 		case type_argument_t:
-			writeOutputFormula(node->synTree.argument_struct.argument, f);
+			writeOutputFormula(node->synTree.argument_struct.argument);
 			if (node->synTree.argument_struct.next != NULL){ 
-			fprintf(stderr,f, ",");
-			writeOutputFormula(node->synTree.argument_struct.next, f);
+			fprintf(stderr, ",");
+			writeOutputFormula(node->synTree.argument_struct.next);
 			}
 			break;
 		default:
 			fprintf(stderr,"OUT: ERROR (current type = %d)", node->type);
-			fprintf(stderr,f,"ERROR: %d", node->type);
+			fprintf(stderr,"ERROR: %d", node->type);
 			exit(1);
 		}
 	}

@@ -38,30 +38,24 @@ file:
         }
         | formula SEMICOLON file {
             printTree($<node>1,0);
+            printSymTab();
+            printf("\n");
             $<node>1 = removeDoubleNeg($<node>1);
             generate($<node>1);
-            FILE *f = fopen("output.pl1", "w");
-            if(f == NULL){
-                fprintf(stderr,"Error opening file!\n");
-                exit(1);
-            }
         };
 
 declarations:     DECLARE PREDICATE ID DD DIGIT { 
                     fprintf(stderr,"PARSER: Declare Predicate %s with %d\n", $<val>3, $<number>5);
 					insert_right($<val>3,Predicate,$<number>5,NoType); 
-					// printTable();
                   }
                 | DECLARE FUNCTION ID DD DIGIT { 
                     fprintf(stderr,"PARSER: Declare Function %s with %d\n", $<val>3, $<number>5);
-                    insert_right($<val>3,Function,$<number>5,NoType); 
-					 // printTable();
+                    insert_right($<val>3,Function,$<number>5,NoType);
                   }
 
                 | DECLARE VARIABLE ID DD INT { 
                     fprintf(stderr,"PARSER: Declare Variable %s with int \n", $<val>3);
                     insert_right($<val>3,Variable,$<number>5,NoType); 
-					// printTable();
                   };
 
 formula:      ID R_B_O term R_B_C { 
