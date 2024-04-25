@@ -47,15 +47,18 @@ file:
 declarations:     DECLARE PREDICATE ID DD DIGIT { 
                     fprintf(stderr,"PARSER: Declare Predicate %s with %d\n", $<val>3, $<number>5);
 					insert_right($<val>3,Predicate,$<number>5,NoType); 
+                    printSymTabService();
                   }
                 | DECLARE FUNCTION ID DD DIGIT { 
                     fprintf(stderr,"PARSER: Declare Function %s with %d\n", $<val>3, $<number>5);
                     insert_right($<val>3,Function,$<number>5,NoType);
+                    printSymTabService();
                   }
 
                 | DECLARE VARIABLE ID DD INT { 
                     fprintf(stderr,"PARSER: Declare Variable %s with int \n", $<val>3);
-                    insert_right($<val>3,Variable,$<number>5,NoType); 
+                    insert_right($<val>3,Variable,$<number>5,NoType);
+                    printSymTabService(); 
                   };
 
 formula:      ID R_B_O term R_B_C { 
