@@ -206,7 +206,7 @@ void freeTeilTree(struct node* node){
 				free(node);
 				break;
 			default:
-				printf("OPT: ERROR couldn't free node (current type = %d)", node->type);
+				fprintf(stderr,"OPT: ERROR couldn't free node (current type = %d)", node->type);
 				exit(1);
 		}
 	}
@@ -263,7 +263,7 @@ struct node *copyOfTeilTree(struct node* node){
 				copyNode->synTree.argument_struct.next = copyOfTeilTree(node->synTree.argument_struct.next);
 				break;
 			default:
-				printf("OPT: ERROR couldn't copy node (current type = %d)", node->type);
+				fprintf(stderr,"OPT: ERROR couldn't copy node (current type = %d)", node->type);
 				exit(1);
 		}
 	}
@@ -284,74 +284,74 @@ void writeOutputFormula(struct node* node, FILE *f){
 		switch (node->type)
 		{
 		case type_all:
-			fprintf(f, "All[");
+			fprintf(stderr,f, "All[");
 			writeOutputFormula(node->synTree.quantor_struct.var, f);
-			fprintf(f, "]");
+			fprintf(stderr,f, "]");
 			writeOutputFormula(node->synTree.quantor_struct.formula, f);
 			break;
 		case type_exist:
-			fprintf(f, "EXIST[");
+			fprintf(stderr,f, "EXIST[");
 			writeOutputFormula(node->synTree.quantor_struct.var, f);
-			fprintf(f, "]");
+			fprintf(stderr,f, "]");
 			writeOutputFormula(node->synTree.quantor_struct.formula, f);
 			break;
 		case type_and:
 			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(f, " & ");
+			fprintf(stderr,f, " & ");
 			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
 			break;
 		case type_or:
 			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(f, " | ");
+			fprintf(stderr,f, " | ");
 			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
 			break;
 		case type_implication:
 			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(f, " -> ");
+			fprintf(stderr,f, " -> ");
 			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
 			break;
 		case type_equivalence:
 			writeOutputFormula(node->synTree.binary_struct.formula_left, f);
-			fprintf(f, " <-> ");
+			fprintf(stderr,f, " <-> ");
 			writeOutputFormula(node->synTree.binary_struct.formula_right, f);
 			break;
 		case type_negation:
-			fprintf(f, "~(");
+			fprintf(stderr,f, "~(");
 			writeOutputFormula(node->synTree.unary_junctor.formula, f);
-			fprintf(f, ")");
+			fprintf(stderr,f, ")");
 			break;
 		case type_predicate:
-			fprintf(f,"%s(", node->synTree.predicate_struct.tableEntry->identifier);
+			fprintf(stderr,f,"%s(", node->synTree.predicate_struct.tableEntry->identifier);
 			writeOutputFormula(node->synTree.predicate_struct.argument, f);
-			fprintf(f, ")");
+			fprintf(stderr,f, ")");
 			break;
 		case type_function:
-			fprintf(f, "%s(", node->synTree.function_struct.tableEntry->identifier);
+			fprintf(stderr,f, "%s(", node->synTree.function_struct.tableEntry->identifier);
 			writeOutputFormula(node->synTree.function_struct.argument, f);
-			fprintf(f, ")");
+			fprintf(stderr,f, ")");
 			break;
 		case type_variable:
-			fprintf(f, "%s", node->synTree.variable_struct.tableEntry->identifier);
+			fprintf(stderr,f, "%s", node->synTree.variable_struct.tableEntry->identifier);
 			break;
 		case type_true_node:
-			fprintf(f, "TRUE");
+			fprintf(stderr,f, "TRUE");
 			break;
 		case type_false_node:
-			fprintf(f, "FALSE");
+			fprintf(stderr,f, "FALSE");
 			break;
 		case type_number_t:
-			fprintf(f, "%d", node->synTree.number);
+			fprintf(stderr,f, "%d", node->synTree.number);
 			break;
 		case type_argument_t:
 			writeOutputFormula(node->synTree.argument_struct.argument, f);
 			if (node->synTree.argument_struct.next != NULL){ 
-			fprintf(f, ",");
+			fprintf(stderr,f, ",");
 			writeOutputFormula(node->synTree.argument_struct.next, f);
 			}
 			break;
 		default:
-			printf("OUT: ERROR (current type = %d)", node->type);
-			fprintf(f,"ERROR: %d", node->type);
+			fprintf(stderr,"OUT: ERROR (current type = %d)", node->type);
+			fprintf(stderr,f,"ERROR: %d", node->type);
 			exit(1);
 		}
 	}
@@ -368,67 +368,67 @@ void printTree(struct node* node, int level)
 	{
 		if (node->type !=type_argument_t)
 		{
-			printf("STP: ");
+			fprintf(stderr,"STP: ");
 			for (int i = 0; i < level; i++)
 			{
-				printf(".");
+				fprintf(stderr,".");
 			}
 		}
 		switch (node->type)
 		{
 		case type_all:
-			printf("All\n");
+			fprintf(stderr,"All\n");
 			printTree(node->synTree.quantor_struct.var, level + 1);
 			printTree(node->synTree.quantor_struct.formula, level + 1);
 			break;
 		case type_exist:
-			printf("EXIST\n");
+			fprintf(stderr,"EXIST\n");
 			printTree(node->synTree.quantor_struct.var, level + 1);
 			printTree(node->synTree.quantor_struct.formula, level + 1);
 			break;
 		case type_and:
-			printf("AND\n");
+			fprintf(stderr,"AND\n");
 			printTree(node->synTree.binary_struct.formula_left, level + 1);
 			printTree(node->synTree.binary_struct.formula_right, level + 1);
 			break;
 		case type_or:
-			printf("OR\n");
+			fprintf(stderr,"OR\n");
 			printTree(node->synTree.binary_struct.formula_left, level + 1);
 			printTree(node->synTree.binary_struct.formula_right, level + 1);
 			break;
 		case type_implication:
-			printf("IMPLICATION\n");
+			fprintf(stderr,"IMPLICATION\n");
 			printTree(node->synTree.binary_struct.formula_left, level + 1);
 			printTree(node->synTree.binary_struct.formula_right, level + 1);
 			break;
 		case type_equivalence:
-			printf("EQUIVALENCE\n");
+			fprintf(stderr,"EQUIVALENCE\n");
 			printTree(node->synTree.binary_struct.formula_left, level + 1);
 			printTree(node->synTree.binary_struct.formula_right, level + 1);
 			break;
 		case type_negation:
-			printf("NEGATION\n");
+			fprintf(stderr,"NEGATION\n");
 			printTree(node->synTree.unary_junctor.formula, level + 1);
 			break;
 		case type_predicate:
-			printf("PREDICATE: %s\n", node->synTree.predicate_struct.tableEntry->identifier);
+			fprintf(stderr,"PREDICATE: %s\n", node->synTree.predicate_struct.tableEntry->identifier);
 			printTree(node->synTree.predicate_struct.argument, level + 1);
 			break;
 		case type_function:
-			printf("FUNCTION: %s\n", node->synTree.function_struct.tableEntry->identifier);
+			fprintf(stderr,"FUNCTION: %s\n", node->synTree.function_struct.tableEntry->identifier);
 			printTree(node->synTree.function_struct.argument, level + 1);
 			break;
 		case type_variable:
-			printf("VARIABLE: %s\n", node->synTree.variable_struct.tableEntry->identifier);
+			fprintf(stderr,"VARIABLE: %s\n", node->synTree.variable_struct.tableEntry->identifier);
 			break;
 		case type_true_node:
-			printf("TRUE\n");
+			fprintf(stderr,"TRUE\n");
 			break;
 		case type_false_node:
-			printf("FALSE\n");
+			fprintf(stderr,"FALSE\n");
 			break;
 		case type_number_t:
-			printf("NUMBER %d\n", node->synTree.number);
+			fprintf(stderr,"NUMBER %d\n", node->synTree.number);
 			break;
 		case type_argument_t:
 			printTree(node->synTree.argument_struct.argument, level);
@@ -437,7 +437,7 @@ void printTree(struct node* node, int level)
 			}
 			break;
 		default:
-			printf("unknown syntax Node\n");
+			fprintf(stderr,"unknown syntax Node\n");
 			exit(1);
 		}
 	}

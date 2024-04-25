@@ -10,99 +10,99 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 %%
 
 "DECLARE" {
-  printf( "LEX: Keyword: DECLARE\n");
+  fprintf(stderr, "LEX: Keyword: DECLARE\n");
   return DECLARE;
 }
 "PREDICATE" {
-  printf( "LEX: Keyword: PREDICATE\n");
+  fprintf(stderr, "LEX: Keyword: PREDICATE\n");
   return PREDICATE;
 }
 "FUNCTION" {
-  printf( "LEX: Keyword: FUNCTION\n");
+  fprintf(stderr, "LEX: Keyword: FUNCTION\n");
   return FUNCTION;
 }
 "VARIABLE" {
-  printf( "LEX: Keyword: VARIABLE\n");
+  fprintf(stderr, "LEX: Keyword: VARIABLE\n");
   return VARIABLE;
 }
 ":" {
-  printf( "LEX: Keyword :\n");
+  fprintf(stderr, "LEX: Keyword :\n");
   return DD;
 }
 "int" {
-  printf( "LEX: Keyword int\n");
+  fprintf(stderr, "LEX: Keyword int\n");
   return INT;
 }
 "<->" {
-  printf("LEX: Keyword EQUIVALENT\n");
+  fprintf(stderr,"LEX: Keyword EQUIVALENT\n");
   return EQUIVALENT;
 }
 "->" {
-  printf("LEX: Keyword implication\n");
+  fprintf(stderr,"LEX: Keyword implication\n");
   return IMPLICATION;
 }
 "|" {
-  printf("LEX: Keyword OR\n");
+  fprintf(stderr,"LEX: Keyword OR\n");
   return OR;
 }
 "&" {
-  printf("LEX: Keyword AND\n");
+  fprintf(stderr,"LEX: Keyword AND\n");
   return AND;
 }
 "ALL" {
-  printf("LEX: Keyword ALL\n");
+  fprintf(stderr,"LEX: Keyword ALL\n");
   return ALL;
 }
 "EXIST" {
-  printf( "LEX: Operator EXISTS\n");
+  fprintf(stderr, "LEX: Operator EXISTS\n");
   return EXIST;
 }
 "TRUE" {
-  printf( "LEX: Keyword TRUE\n");
+  fprintf(stderr, "LEX: Keyword TRUE\n");
   return TRUE;
 }
 "FALSE" {
-  printf( "LEX: Keyword FALSE\n");
+  fprintf(stderr, "LEX: Keyword FALSE\n");
   return FALSE;
 }
 "~" {
-  printf( "LEX: Keyword negation %s\n", yytext );
+  fprintf(stderr, "LEX: Keyword negation %s\n", yytext );
   return NOT;
 }
 "[" {
-  printf( "LEX: Keyword eckige Klammer auf %s\n", yytext );
+  fprintf(stderr, "LEX: Keyword eckige Klammer auf %s\n", yytext );
   return B_O;
   }
 "]" {
-  printf( "LEX: Keyword eckige Klammer zu %s\n", yytext );
+  fprintf(stderr, "LEX: Keyword eckige Klammer zu %s\n", yytext );
   return B_C;
 }
 "(" {
-  printf( "LEX: Keyword runde Klammer auf %s\n", yytext );
+  fprintf(stderr, "LEX: Keyword runde Klammer auf %s\n", yytext );
   return R_B_O;
 }
 ")" {
-  printf( "LEX: Keyword runde Klammer zu %s\n", yytext );
+  fprintf(stderr, "LEX: Keyword runde Klammer zu %s\n", yytext );
   return R_B_C;
 }
 "/*".*"*/" {
-  printf( "LEX: Comment %s\n", yytext );
+  fprintf(stderr, "LEX: Comment %s\n", yytext );
 }
 ";" {
-  printf( "LEX: Keyword ;\n");
+  fprintf(stderr, "LEX: Keyword ;\n");
   return SEMICOLON;
 }
 "," {
-  printf( "LEX: Keyword , \n");
+  fprintf(stderr, "LEX: Keyword , \n");
   return COMMA;
 }
 {ID} {
-  printf( "LEX: Identifier: %s\n", yytext );
+  fprintf(stderr, "LEX: Identifier: %s\n", yytext );
   strcpy(yylval.val,yytext);
   return ID;
 }  
 [0-9]+ {
-  printf("LEX: Digit: %s\n", yytext );
+  fprintf(stderr,"LEX: Digit: %s\n", yytext );
   yylval.number = atoi( yytext );
   return DIGIT;
 }
@@ -110,7 +110,7 @@ ID [a-zA-Z][a-zA-Z0-9_]*
 
 }
 . {
-  printf("LEX: Error: %s\n", yytext );
+  fprintf(stderr,"LEX: Error: %s\n", yytext );
 }
 
 %%
