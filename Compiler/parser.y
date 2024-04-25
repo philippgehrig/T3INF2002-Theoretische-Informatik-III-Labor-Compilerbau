@@ -43,6 +43,7 @@ file:
             printf("\n");
             $<node>1 = optimizeFormula($<node>1);
             generate($<node>1);
+            printf(";\n");
         };
 
 declarations:     DECLARE PREDICATE ID DD DIGIT { 

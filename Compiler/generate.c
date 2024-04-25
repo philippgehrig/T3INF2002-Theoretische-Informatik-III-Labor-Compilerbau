@@ -4,7 +4,6 @@
 #include "symTab.h"
 #include "generate.h"
 
-
 void generate(struct node *node)
 {
     generate_helper(node, NULL, false);
@@ -70,10 +69,14 @@ void generate_helper(struct node *node, struct node *parent, bool right)
             printf(")");
             break;
         case type_function:
-            // printf("FUNCTION ");
-            printf("%s(", node->synTree.function_struct.tableEntry->identifier);
-            generate_helper(node->synTree.function_struct.argument, node, false);
-            printf(") ");
+            if (node->synTree.function_struct.tableEntry->arity == 0)
+                printf("%s ", node->synTree.function_struct.tableEntry->identifier);
+            else
+            {
+                printf("%s(", node->synTree.function_struct.tableEntry->identifier);
+                generate_helper(node->synTree.function_struct.argument, node, false);
+                printf(") ");
+            }
             break;
         case type_variable:
             printf("%s", node->synTree.variable_struct.tableEntry->identifier);
@@ -157,5 +160,6 @@ void addBracket(struct node *node, bool right, struct node *parent)
         generate(node);
         printf(")");
     }
-    else generate(node);
+    else
+        generate(node);
 }

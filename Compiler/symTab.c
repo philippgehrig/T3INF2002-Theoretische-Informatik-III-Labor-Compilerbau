@@ -145,6 +145,9 @@ void printSymTab(){
 		if(temp->var_type != NoType){
 			printf("%s\n",var_types[temp->var_type]);
 		}
+        else if(temp->typ == Variable){
+            printf("int \n");
+        }
 		else{
 			printf("%d \n", temp->arity);
 		}
