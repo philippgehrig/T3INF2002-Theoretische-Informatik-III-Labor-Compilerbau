@@ -44,18 +44,18 @@ struct node* removeDoubleNeg(struct node* node)
 
 struct node* moveNeg(struct node* node){
 	struct node* rueck;
+    struct node* newLeft;
+    struct node* newRight;
+    struct node* newNegationNode;
 	switch (node->type){
 	    case type_negation:
-            struct node* newLeft;
-            struct node* newRight;
-			struct node* newNegationNode ;
             switch(node->synTree.unary_junctor.formula->type){
                 case type_and:
                     fprintf(stderr, "OPT: Shift Negation in Conjunction\n");
                     newLeft = makeNegationNode(node->synTree.unary_junctor.formula->synTree.binary_struct.formula_left);
                     newRight = makeNegationNode(node->synTree.unary_junctor.formula->synTree.binary_struct.formula_right);
-                    newRight = verschiebeNegation(newRight);
-                    newLeft = verschiebeNegation(newLeft);
+                    newRight = moveNeg(newRight);
+                    newLeft = moveNeg(newLeft);
                     rueck = makeDisjunctionNode(newLeft, newRight);
                     free(node->synTree.unary_junctor.formula);
                     free(node);
@@ -64,8 +64,8 @@ struct node* moveNeg(struct node* node){
                     fprintf(stderr, "OPT: Shift Negation in Disjunction\n");
                     newLeft = makeNegationNode(node->synTree.unary_junctor.formula->synTree.binary_struct.formula_left);
                     newRight = makeNegationNode(node->synTree.unary_junctor.formula->synTree.binary_struct.formula_right);
-                    newRight = verschiebeNegation(newRight);
-                    newLeft = verschiebeNegation(newLeft);
+                    newRight = moveNeg(newRight);
+                    newLeft = moveNeg(newLeft);
                     rueck = makeConjunctionNode(newLeft, newRight);
                     free(node->synTree.unary_junctor.formula);
                     free(node); 
@@ -73,7 +73,7 @@ struct node* moveNeg(struct node* node){
                 case type_exist:
                     fprintf(stderr, "OPT: Shift Negation in Exist\n");
 					newNegationNode = makeNegationNode(node->synTree.unary_junctor.formula->synTree.quantor_struct.formula);
-                    newNegationNode = verschiebeNegation(newNegationNode);
+                    newNegationNode = moveNeg(newNegationNode);
 					rueck = makeAllNode(node->synTree.unary_junctor.formula->synTree.quantor_struct.var,newNegationNode);
                     free(node->synTree.unary_junctor.formula);
 					free(node);
@@ -81,7 +81,7 @@ struct node* moveNeg(struct node* node){
                 case type_all:
                     fprintf(stderr, "OPT: Shift Negation in All\n");
                     newNegationNode = makeNegationNode(node->synTree.unary_junctor.formula->synTree.quantor_struct.formula);
-					newNegationNode = verschiebeNegation(newNegationNode);
+					newNegationNode = moveNeg(newNegationNode);
                     rueck = makeExistNode(node->synTree.unary_junctor.formula->synTree.quantor_struct.var,newNegationNode);
                     free(node->synTree.unary_junctor.formula);
                     free(node);
@@ -93,7 +93,7 @@ struct node* moveNeg(struct node* node){
 			break;
         case type_all:
 		case type_exist:
-			rueck = verschiebeNegation(node->synTree.quantor_struct.formula);
+			rueck = moveNeg(node->synTree.quantor_struct.formula);
             node->synTree.quantor_struct.formula = rueck;
             rueck = node;
 			break;
@@ -101,10 +101,10 @@ struct node* moveNeg(struct node* node){
 		case type_or:
 		case type_implication:
 		case type_equivalence:
-            struct node* left = verschiebeNegation(node->synTree.binary_struct.formula_left);
-			struct node* right = verschiebeNegation(node->synTree.binary_struct.formula_right);
-			node->synTree.binary_struct.formula_left = left;
-            node->synTree.binary_struct.formula_right = right;
+            newLeft = moveNeg(node->synTree.binary_struct.formula_left);
+			newRight = moveNeg(node->synTree.binary_struct.formula_right);
+			node->synTree.binary_struct.formula_left = newLeft;
+            node->synTree.binary_struct.formula_right = newRight;
             rueck = node;
 			break;
 		default:
