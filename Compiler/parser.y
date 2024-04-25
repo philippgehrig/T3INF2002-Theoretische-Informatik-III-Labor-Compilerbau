@@ -38,9 +38,10 @@ file:
         }
         | formula SEMICOLON file {
             printTree($<node>1,0);
+
             printSymTab();
             printf("\n");
-            $<node>1 = removeDoubleNeg($<node>1);
+            $<node>1 = optimizeFormula($<node>1);
             generate($<node>1);
         };
 
