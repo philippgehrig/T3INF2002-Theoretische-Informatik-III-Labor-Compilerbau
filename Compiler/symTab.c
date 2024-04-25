@@ -9,7 +9,7 @@ tableEntry SymTable = NULL;
 tableEntry insert_right(char identifier[], typ typ, int arity, var_type type)
 {
     if(search_for(identifier) == NULL){
-        printf("SYM: Inserting %s into the symboltable with arity %d\n", identifier, arity);
+        fprintf(stderr, "SYM: Inserting %s into the symboltable with arity %d\n", identifier, arity);
         tableEntry new_tableEntry;
         new_tableEntry = (tableEntry)malloc(sizeof(struct tableEntry_struct));
         strcpy(new_tableEntry->identifier, identifier);
@@ -20,7 +20,7 @@ tableEntry insert_right(char identifier[], typ typ, int arity, var_type type)
 
         if (SymTable == NULL)
         {
-            printf("\n------------initializing symboltable----------\n");
+            fprintf(stderr, "\n------------initializing symboltable----------\n");
             SymTable = new_tableEntry;
         }
         else
@@ -37,7 +37,7 @@ tableEntry insert_right(char identifier[], typ typ, int arity, var_type type)
         return new_tableEntry;
     }
     else{
-        printf("ID already exists!");
+        fprintf(stderr, "ID already exists!");
     }
     return NULL;
 }
@@ -109,21 +109,21 @@ tableEntry search_for(char *identifier)
 
 void printTable()
 {
-	printf("\n------Symboltable-------:\n");
+	fprintf(stderr, "\n------Symboltable-------:\n");
 	char const *typen[] = {"Predicate", "Function", "Variable"};
 	char const *var_types[] = {"int", "NoType"};
 	int index = 1;
 	tableEntry temp = SymTable;
 	while (temp != NULL)
 	{
-		printf("\n----%d----\n", index);
-		printf("ID: %s \n", temp->identifier);
-		printf("Typ: %s \n", typen[temp->typ]);
-		printf("Arity: %d \n", temp->arity);
-		printf("Arity Typ: %s \n",var_types[temp->var_type]);
+		fprintf(stderr, "\n----%d----\n", index);
+		fprintf(stderr, "ID: %s \n", temp->identifier);
+		fprintf(stderr, "Typ: %s \n", typen[temp->typ]);
+		fprintf(stderr, "Arity: %d \n", temp->arity);
+		fprintf(stderr, "Arity Typ: %s \n",var_types[temp->var_type]);
 		index++;
 		temp = temp->next;
 	}
 	temp = NULL;
-	printf("\n-----------------------------\n");
+	fprintf(stderr, "\n-----------------------------\n");
 }
