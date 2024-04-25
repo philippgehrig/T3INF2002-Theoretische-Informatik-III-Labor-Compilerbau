@@ -64,13 +64,13 @@ void generate_helper(struct node *node, struct node *parent, bool right)
             generate_helper(node->synTree.unary_junctor.formula, node, false);
             break;
         case type_predicate:
-            printf("PREDICATE ");
+            // printf("PREDICATE ");
             printf("%s(", node->synTree.predicate_struct.tableEntry->identifier);
             generate_helper(node->synTree.predicate_struct.argument, node, false);
             printf(")");
             break;
         case type_function:
-            printf("FUNCTION ");
+            // printf("FUNCTION ");
             printf("%s(", node->synTree.function_struct.tableEntry->identifier);
             generate_helper(node->synTree.function_struct.argument, node, false);
             printf(") ");
@@ -144,7 +144,7 @@ void addBracket(struct node *node, bool right, struct node *parent)
         case type_equivalence:
             // Implication and equivalence are the least tightly binding and right-associative
             // Reduce bracket use: only add if switching between different types or for clarity in complex expressions
-            needsBrackets = right && (node->type != parent->type);
+            // needsBrackets = right && (node->type != parent->type);
             break;
         default:
             break;
