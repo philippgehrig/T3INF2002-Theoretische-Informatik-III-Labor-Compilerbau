@@ -155,6 +155,7 @@ struct node* makeFormulaEasier(struct node* node){
             free(node);
 			break;
 		default:
+            fprintf(stderr,"OPT: Default\n");
 			rueck = node;
 	}
 	return rueck;
@@ -252,9 +253,9 @@ struct node* makeBoolOperations(struct node* node){
 
 struct node* optimizeFormula(struct node* node){
     struct node* rueck;
-    rueck = makeFormulaEasier(rueck);
+    rueck = makeFormulaEasier(node);
     rueck = moveNeg(rueck);
-    rueck = removeDoubleNeg(node);
+    rueck = removeDoubleNeg(rueck);
     rueck = makeBoolOperations(rueck);
     return rueck;
 }
