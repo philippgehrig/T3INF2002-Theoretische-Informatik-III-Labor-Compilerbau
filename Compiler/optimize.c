@@ -135,7 +135,7 @@ struct node* makeFormulaEasier(struct node* node){
             rueck = node;
 			break;
 		case type_equivalence:
-            printf("OPT: Make Equivalence easier\n");
+            fprintf(stderr,"OPT: Make Equivalence easier\n");
             node->synTree.binary_struct.formula_left = makeFormulaEasier(node->synTree.binary_struct.formula_left);
             node->synTree.binary_struct.formula_right = makeFormulaEasier(node->synTree.binary_struct.formula_right);
             left = makeConjunctionNode(node->synTree.binary_struct.formula_left, node->synTree.binary_struct.formula_right);
@@ -146,7 +146,7 @@ struct node* makeFormulaEasier(struct node* node){
             free(node);
             break;
 		case type_implication:
-            printf("OPT: Make Implication easier\n");
+            fprintf(stderr,"OPT: Make Implication easier\n");
             node->synTree.binary_struct.formula_left = makeFormulaEasier(node->synTree.binary_struct.formula_left);
             node->synTree.binary_struct.formula_right = makeFormulaEasier(node->synTree.binary_struct.formula_right);
             left = makeNegationNode(node->synTree.binary_struct.formula_left);
@@ -167,19 +167,19 @@ struct node* makeBoolOperations(struct node* node){
             node->synTree.binary_struct.formula_left = makeBoolOperations(node->synTree.binary_struct.formula_left);
             node->synTree.binary_struct.formula_right = makeBoolOperations(node->synTree.binary_struct.formula_right);
             if(node->synTree.binary_struct.formula_left->type == type_true_node){
-                printf("OPT: Refactor unnecessary Conjunction with left Formula\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Conjunction with left Formula\n");
                 rueck = node->synTree.binary_struct.formula_right;
                 freeTeilTree(node->synTree.binary_struct.formula_left);
                 free(node);
             }
             else if(node->synTree.binary_struct.formula_right->type == type_true_node){
-                printf("OPT: Refactor unnecessary Conjunction with right Formula\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Conjunction with right Formula\n");
                 rueck = node->synTree.binary_struct.formula_left;
                 freeTeilTree(node->synTree.binary_struct.formula_right);
                 free(node);
             }
             else if(node->synTree.binary_struct.formula_left->type == type_false_node || node->synTree.binary_struct.formula_right->type == type_false_node){
-                printf("OPT: Refactor unnecessary Conjunction with False\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Conjunction with False\n");
                 rueck = makeFalseNode();
                 freeTeilTree(node->synTree.binary_struct.formula_left);
                 freeTeilTree(node->synTree.binary_struct.formula_right);
@@ -194,20 +194,20 @@ struct node* makeBoolOperations(struct node* node){
             node->synTree.binary_struct.formula_right = makeBoolOperations(node->synTree.binary_struct.formula_right);
 
             if(node->synTree.binary_struct.formula_left->type == type_true_node || node->synTree.binary_struct.formula_right->type == type_true_node){
-                printf("OPT: Refactor unnecessary Disjunction with True\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Disjunction with True\n");
                 rueck = makeTrueNode();
                 freeTeilTree(node->synTree.binary_struct.formula_left);
                 freeTeilTree(node->synTree.binary_struct.formula_right);
                 free(node);
             }
             else if(node->synTree.binary_struct.formula_left->type == type_false_node){
-                printf("OPT: Refactor unnecessary Disjunction with right Formula\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Disjunction with right Formula\n");
                 rueck = node->synTree.binary_struct.formula_right;
                 freeTeilTree(node->synTree.binary_struct.formula_left);
                 free(node);
             }
             else if(node->synTree.binary_struct.formula_right->type == type_false_node){
-                printf("OPT: Refactor unnecessary Disjunction with left Formula\n");
+                fprintf(stderr,"OPT: Refactor unnecessary Disjunction with left Formula\n");
                 rueck = node->synTree.binary_struct.formula_left;
                 freeTeilTree(node->synTree.binary_struct.formula_right);
                 free(node);
@@ -219,12 +219,12 @@ struct node* makeBoolOperations(struct node* node){
 	    case type_negation:
 		    node->synTree.unary_junctor.formula = makeBoolOperations(node->synTree.unary_junctor.formula);
             if(node->synTree.unary_junctor.formula->type == type_true_node){
-                printf("OPT: Refactor Negation True with False\n");
+                fprintf(stderr,"OPT: Refactor Negation True with False\n");
                 rueck = makeFalseNode();
                 free(node->synTree.unary_junctor.formula);
                 free(node);
             }else if(node->synTree.unary_junctor.formula->type == type_false_node){
-                printf("OPT: Refactor Negation False with True\n");
+                fprintf(stderr, "OPT: Refactor Negation False with True\n");
                 rueck = makeTrueNode();
                 free(node->synTree.unary_junctor.formula);
                 free(node);
