@@ -40,11 +40,6 @@ file:
             printTree($<node>1,0);
             $<node>1 = optimizeFormula($<node>1);
             generate($<node>1);
-            FILE *f = fopen("output.pl1", "w");
-            if(f == NULL){
-                fprintf(stderr,"Error opening file!\n");
-                exit(1);
-            }
         };
 
 declarations:     DECLARE PREDICATE ID DD DIGIT { 
