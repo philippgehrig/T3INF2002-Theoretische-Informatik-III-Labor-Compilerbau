@@ -6,7 +6,8 @@
 
 struct node* removeDoubleNeg(struct node* node);
 struct node* optimzeFormula(struct node* node);
-struct node* verschiebeNegation(struct node* node);
-struct node* makeFormulaEasier(struct node* node);
+struct node* moveNeg(struct node* node);
+struct node* makeBoolOperations(struct node* node);
+struct node* optimizeFormula(struct node* node);
 
 #endif

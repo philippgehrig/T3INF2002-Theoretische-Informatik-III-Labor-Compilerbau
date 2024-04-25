@@ -38,7 +38,7 @@ file:
         }
         | formula SEMICOLON file {
             printTree($<node>1,0);
-            $<node>1 = removeDoubleNeg($<node>1);
+            $<node>1 = optimizeFormula($<node>1);
             generate($<node>1);
             FILE *f = fopen("output.pl1", "w");
             if(f == NULL){
