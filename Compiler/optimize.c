@@ -13,7 +13,7 @@ struct node* removeDoubleNeg(struct node* node)
     switch (node->type){
         case type_negation:
             if(node->synTree.unary_junctor.formula->type == type_negation){
-                printf("OPT: found double negation\n");
+                fprintf(stderr,"OPT: found double negation\n");
                 back = removeDoubleNeg(node->synTree.unary_junctor.formula ->synTree.unary_junctor.formula);
                 free(node->synTree.unary_junctor.formula);
                 free(node);
@@ -252,9 +252,9 @@ struct node* makeBoolOperations(struct node* node){
 
 struct node* optimizeFormula(struct node* node){
     struct node* rueck;
-    rueck = removeDoubleNeg(node);
-    rueck = moveNeg(rueck);
     rueck = makeFormulaEasier(rueck);
+    rueck = moveNeg(rueck);
+    rueck = removeDoubleNeg(node);
     rueck = makeBoolOperations(rueck);
     return rueck;
 }

@@ -135,7 +135,7 @@ void printSymTab(){
 	char const *var_types[] = {"int", "NoType"};
 
 	tableEntry temp = SymTable;
-    
+
 	while (temp != NULL)
 	{
 		printf("DECLARE ");
