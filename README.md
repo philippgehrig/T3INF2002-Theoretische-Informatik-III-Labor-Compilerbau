@@ -1,5 +1,6 @@
 # Compilerbau
 
+This project was graded with "passed"
 This repo contains all the files for the university course: T3INF2002 Theoretische Informatik III - Labor Compilerbau
 
 ## Contributors
